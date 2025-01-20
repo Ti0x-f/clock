@@ -115,7 +115,7 @@ componentDidUpdate(prevProps, prevState) {
         <Selector id="break" decrement={this.decrement} increment={this.increment} value={this.state.breakLength} _
         running={this.state.running}/>
         <Timer currentSession={this.state.currentSession} currentBreak={this.state.currentBreak} sessionRunning={this.state.sessionRunning} _
-        breakRunning={this.state.breakRunning} stopStartHandler={this.handleStartPause} resetHandler={this.reset}/>
+        breakRunning={this.state.breakRunning} stopStartHandler={this.handleStartPause} resetHandler={this.reset} pause={this.state.pause}/>
       </div>
     );
   }
@@ -125,14 +125,18 @@ const Selector = ({id, decrement, increment, value, running}) => {
   return (
     <div id={id + "-label"}>
       <p>{id.charAt(0).toUpperCase() + id.slice(1)} Length</p>
-      <button id={id + "-increment"} onClick={() => increment(id)} disabled={running}>+</button>
+      <button id={id + "-increment"} onClick={() => increment(id)} disabled={running}>
+        <i className="fas fa-plus"></i>
+      </button>
       <p id={id + "-length"}>{value}</p>
-      <button id={id + "-decrement"} onClick={() => decrement(id)} disabled={running}>-</button>
+      <button id={id + "-decrement"} onClick={() => decrement(id)} disabled={running}>
+        <i className="fas fa-minus"></i>
+      </button>
     </div>
   );
 }
 
-const Timer = ({currentSession, currentBreak, breakRunning, stopStartHandler, resetHandler}) => {
+const Timer = ({currentSession, currentBreak, breakRunning, stopStartHandler, resetHandler, pause}) => {
   const audioRef = React.useRef(null);
   
   const handleReset = () => {
@@ -151,17 +155,21 @@ const Timer = ({currentSession, currentBreak, breakRunning, stopStartHandler, re
     <div className="timer">
         <p id="timer-label">{breakRunning ? "Break" : "Session"}</p>
         <p id="time-left"><span>{minutes}</span>:<span>{seconds}</span></p>
-        <Button usage="Start / Stop" usageHandler={stopStartHandler} id="start_stop"/>
+        <Button usage="Start / Stop" usageHandler={stopStartHandler} id="start_stop" pause={pause}/>
         <Button usage="Reset" usageHandler={handleReset} id="reset"/>
         <Beep toBePlayed={currentlyRunning === 0 ? true : false} ref={audioRef} />
     </div>
   )
 }
 
-const Button = ({ usage, usageHandler, id}) => {
+const Button = ({ usage, usageHandler, id, pause}) => {
   return (
     <button id={id} onClick={usageHandler}>
-      {usage}
+      {id === "start_stop" ? (
+        pause ? <i className="fa fa-play"></i> : <i className="fa fa-pause"></i>
+      ) : (
+        <i className="fas fa-rotate-left"></i>
+      )}
     </button>
   );
 };
