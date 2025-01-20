@@ -34,7 +34,7 @@ class App extends React.Component {
     }));
 }
 
-componentDidUpdate(prevState) {
+componentDidUpdate(prevProps, prevState) {
   if (!prevState.running && this.state.running) {
       this.handleTimer();
   }
@@ -63,30 +63,6 @@ componentDidUpdate(prevState) {
         }, 1000);
     }
 }
-
-
-updateSessionTimer() {
-    this.setState((prevState) => {
-        if (prevState.currentSession > 0) {
-            return { currentSession: prevState.currentSession - 1 };
-        } else {
-            clearInterval(this.timer);
-            return { sessionRunning: false, breakRunning: true};
-        }
-    }, this.handleTimer);
-}
-
-updateBreakTimer() {
-    this.setState((prevState) => {
-        if (prevState.currentBreak > 0) {
-            return { currentBreak: prevState.currentBreak - 1 };
-        } else {
-            clearInterval(this.timer);
-            return { breakRunning: false, sessionRunning: true};
-        }
-    }, this.handleTimer);
-}
-
 
   reset() {
     this.setState(() => ({
