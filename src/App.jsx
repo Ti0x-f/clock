@@ -132,18 +132,28 @@ const Selector = ({id, decrement, increment, value, running}) => {
   );
 }
 
-const Timer = ({currentSession, currentBreak, sessionRunning, breakRunning, stopStartHandler, resetHandler}) => {
+const Timer = ({currentSession, currentBreak, breakRunning, stopStartHandler, resetHandler}) => {
+  const audioRef = React.useRef(null);
+  
+  const handleReset = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    resetHandler();
+  };
+
   let currentlyRunning = breakRunning ? currentBreak : currentSession;
   let minutes = String(Math.floor(currentlyRunning / 60)).padStart(2, '0');
   let seconds = String(currentlyRunning % 60).padStart(2, '0');
-  console.log(currentlyRunning)
+  
   return(
     <div className="timer">
         <p id="timer-label">{breakRunning ? "Break" : "Session"}</p>
         <p id="time-left"><span>{minutes}</span>:<span>{seconds}</span></p>
         <Button usage="Start / Stop" usageHandler={stopStartHandler} id="start_stop"/>
-        <Button usage="Reset" usageHandler={resetHandler} id="reset"/>
-        <Beep toBePlayed={currentlyRunning === 0 ? true : false} />
+        <Button usage="Reset" usageHandler={handleReset} id="reset"/>
+        <Beep toBePlayed={currentlyRunning === 0 ? true : false} ref={audioRef} />
     </div>
   )
 }
@@ -156,13 +166,23 @@ const Button = ({ usage, usageHandler, id}) => {
   );
 };
 
-const Beep = ({toBePlayed}) => {
-  if (toBePlayed) {
-    console.log("here")
-    return (
-      <audio src="https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav" preload="auto"></audio>
-    )
-  }
-}
+const Beep = React.forwardRef(({toBePlayed}, ref) => {
+  React.useEffect(() => {
+    if (toBePlayed && ref.current) {
+      ref.current.play().catch(error => {
+        console.log("Audio playback failed:", error);
+      });
+    }
+  }, [toBePlayed]);
+
+  return (
+    <audio 
+      id="beep"
+      ref={ref}
+      src="https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav" 
+      preload="auto"
+    />
+  );
+});
 
 export default App;
