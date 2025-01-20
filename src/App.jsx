@@ -111,9 +111,9 @@ componentDidUpdate(prevProps, prevState) {
     return (
       <div className="session-and-break">
         <Selector id="session" decrement={this.decrement} increment={this.increment} value={this.state.sessionLength} _
-        sessionRunning={this.state.sessionRunning} breakRunning={this.state.breakRunning}/>
+        running={this.state.running}/>
         <Selector id="break" decrement={this.decrement} increment={this.increment} value={this.state.breakLength} _
-        sessionRunning={this.state.sessionRunning} breakRunning={this.state.breakRunning}/>
+        running={this.state.running}/>
         <Timer currentSession={this.state.currentSession} currentBreak={this.state.currentBreak} sessionRunning={this.state.sessionRunning} _
         breakRunning={this.state.breakRunning} stopStartHandler={this.handleStartPause} resetHandler={this.reset}/>
       </div>
@@ -121,14 +121,13 @@ componentDidUpdate(prevProps, prevState) {
   }
 }
 
-const Selector = ({id, decrement, increment, value, sessionRunning, breakRunning}) => {
-  const isDisabled = sessionRunning || breakRunning;
+const Selector = ({id, decrement, increment, value, running}) => {
   return (
     <div id={id + "-label"}>
       <p>{id.charAt(0).toUpperCase() + id.slice(1)} Length</p>
-      <button id={id + "-increment"} onClick={() => increment(id)} disabled={isDisabled}>+</button>
+      <button id={id + "-increment"} onClick={() => increment(id)} disabled={running}>+</button>
       <p id={id + "-length"}>{value}</p>
-      <button id={id + "-decrement"} onClick={() => decrement(id)} disabled={isDisabled}>-</button>
+      <button id={id + "-decrement"} onClick={() => decrement(id)} disabled={running}>-</button>
     </div>
   );
 }
