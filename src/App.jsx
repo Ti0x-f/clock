@@ -136,23 +136,33 @@ const Timer = ({currentSession, currentBreak, sessionRunning, breakRunning, stop
   let currentlyRunning = breakRunning ? currentBreak : currentSession;
   let minutes = String(Math.floor(currentlyRunning / 60)).padStart(2, '0');
   let seconds = String(currentlyRunning % 60).padStart(2, '0');
-
+  console.log(currentlyRunning)
   return(
     <div className="timer">
         <p id="timer-label">{breakRunning ? "Break" : "Session"}</p>
         <p id="time-left"><span>{minutes}</span>:<span>{seconds}</span></p>
-        <Button usage="Start / Stop" usageHandler={stopStartHandler} />
-        <Button usage="Reset" usageHandler={resetHandler} />
+        <Button usage="Start / Stop" usageHandler={stopStartHandler} id="start_stop"/>
+        <Button usage="Reset" usageHandler={resetHandler} id="reset"/>
+        <Beep toBePlayed={currentlyRunning === 0 ? true : false} />
     </div>
   )
 }
 
-const Button = ({ usage, usageHandler}) => {
+const Button = ({ usage, usageHandler, id}) => {
   return (
-    <button onClick={usageHandler}>
+    <button id={id} onClick={usageHandler}>
       {usage}
     </button>
   );
 };
+
+const Beep = ({toBePlayed}) => {
+  if (toBePlayed) {
+    console.log("here")
+    return (
+      <audio src="https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav" preload="auto"></audio>
+    )
+  }
+}
 
 export default App;
