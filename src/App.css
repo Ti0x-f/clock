@@ -20,7 +20,6 @@ body {
   gap: 2rem;
 }
 
-/* Selector styles */
 #session-label, #break-label {
   background-color: #ffe4cc;
   padding: 1.5rem;
@@ -57,7 +56,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Timer styles */
 .timer {
   text-align: center;
   background-color: #d35400;
@@ -79,7 +77,6 @@ button:disabled {
   font-weight: 600;
 }
 
-/* Control buttons */
 .timer-controls {
   display: flex;
   justify-content: center;
@@ -93,7 +90,6 @@ button:disabled {
   font-size: 1.5rem;
 }
 
-/* Responsive design */
 @media (min-width: 768px) {
   .session-and-break {
     flex-direction: row;
